@@ -21,6 +21,7 @@ module Yammer
 
     include Yammer::Configurable
     include Yammer::Api::User
+    include Yammer::Api::File
     include Yammer::Api::Group
     include Yammer::Api::GroupMembership
     include Yammer::Api::Message
