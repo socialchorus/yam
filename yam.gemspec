@@ -55,5 +55,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'webmock', '~> 1.17', '>= 1.17.0'
   s.add_development_dependency 'yard', '~> 0.8', '>= 0.8.7'
 
-  s.post_install_message = %q{ Thank you for installing! For API help go to https://developer.yammer.com }
+  s.post_install_message = "Thank you for installing Yam! For API help go to https://developer.yammer.com/docs/getting-started\n"
 end

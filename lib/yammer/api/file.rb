@@ -17,12 +17,14 @@ module Yammer
     # @option opts [Integer] :group_id
     # @option opts [String] :thread_id
     module File
-      def upload_small_file(network_id, target_type, filename, file, opts={})
-        opts[:network_id] = network_id
-        opts[:target_type] = target_type
-        opts[:filename] = filename
-        opts[:file] = file
-        post('https://filesng.yammer.com/v4/uploadSmallFile', opts)
+      def upload_small_file(network_id, target_type, filename, file, opts = {})
+        params = {
+          network_id: network_id,
+          target_type: target_type,
+          filename: filename,
+          file: file,
+        }
+        post('/v4/uploadSmallFile', opts.merge(params), site: 'https://filesng.yammer.com')
       end
     end
   end
