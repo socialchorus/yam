@@ -73,7 +73,12 @@ class HttpAdapter
         normalized_path = query.empty? ? path : [path, query].join("?")
         req_opts[:url]  = absolute_url(normalized_path)
       when :post, :put
-        req_opts[:payload] = params
+        req_opts[:payload] =
+          if params.is_a?(Array)
+            RestClient::ParamsArray.new(params)
+          else
+            params
+          end
         req_opts[:url]     = absolute_url(path)
       else
         raise "Unsupported HTTP method, #{method}"
