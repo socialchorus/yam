@@ -14,6 +14,7 @@
 
 require 'yammer/api/activity'
 require 'yammer/api/user'
+require 'yammer/api/file'
 require 'yammer/api/group'
 require 'yammer/api/group_membership'
 require 'yammer/api/message'

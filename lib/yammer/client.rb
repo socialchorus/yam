@@ -21,6 +21,7 @@ module Yammer
 
     include Yammer::Configurable
     include Yammer::Api::User
+    include Yammer::Api::File
     include Yammer::Api::Group
     include Yammer::Api::GroupMembership
     include Yammer::Api::Message
@@ -54,23 +55,23 @@ module Yammer
     end
 
     # makes a GET request
-    def get(path, params={})
-      request(:get, path, params)
+    def get(path, params = {}, site: nil)
+      request(:get, path, params, site: site)
     end
 
     # makes a PUT request
-    def put(path, params={})
-      request(:put, path, params)
+    def put(path, params = {}, site: nil)
+      request(:put, path, params, site: site)
     end
 
     # makes a POST request
-    def post(path, params={})
-      request(:post, path, params)
+    def post(path, params = {}, site: nil)
+      request(:post, path, params, site: site)
     end
 
     # makes a DELETE request
-    def delete(path, params={})
-      request(:delete, path, params)
+    def delete(path, params = {}, site: nil)
+      request(:delete, path, params, site: site)
     end
 
   private
@@ -87,13 +88,15 @@ module Yammer
     # @param method [string]
     # @param path [string]
     # @param params [Hash]
+    # @option site [string]
     # @return [Yammer::ApiResponse]
     # @!visibility private
-    def request(method, path, params={})
+    def request(method, path, params = {}, site: nil)
+      client = site.nil? ? http_client : @http_adapter.new(site, @connection_options)
       headers = @default_headers.merge({'Authorization' => "Bearer #{@access_token}"})
-      result = http_client.send_request(method, path, {
-        :params  => params,
-        :headers => headers
+      result = client.send_request(method, path, {
+        params: params,
+        headers: headers
       })
       result
     end

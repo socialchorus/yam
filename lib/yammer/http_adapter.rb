@@ -60,7 +60,7 @@ class HttpAdapter
 
   def send_request(method, path, opts={})
     begin
-      params  = opts.fetch(:params, {})
+      params = opts.fetch(:params, {})
 
       req_opts = self.connection_options.merge({
         :method  => method,
@@ -73,15 +73,21 @@ class HttpAdapter
         normalized_path = query.empty? ? path : [path, query].join("?")
         req_opts[:url]  = absolute_url(normalized_path)
       when :post, :put
-        req_opts[:payload] = params
+        req_opts[:payload] =
+          if params.is_a?(Array)
+            RestClient::ParamsArray.new(params)
+          else
+            params
+          end
         req_opts[:url]     = absolute_url(path)
       else
         raise "Unsupported HTTP method, #{method}"
       end
 
+      Rails.logger.debug(message: 'yam sending request', request_options: req_opts)
       resp = RestClient::Request.execute(req_opts)
-    
-      result = Yammer::ApiResponse.new(resp.headers, resp.body, resp.code)
+
+      Yammer::ApiResponse.new(resp.headers, resp.body, resp.code)
     rescue => e
       if e.is_a?(RestClient::ExceptionWithResponse)
         e.response

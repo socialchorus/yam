@@ -40,7 +40,12 @@ module Yammer
       #   msg3 =  Yammer.create_message('building a yammer client', :attachment1 => file1, :attachment2 => file2 )
       #
       def create_message(body, opts={})
-        opts[:body] = body
+        if opts.is_a?(Array)
+          opts.push(['body', body])
+        else
+          opts[:body] = body
+        end
+
         post("/api/v1/messages", opts)
       end
 
